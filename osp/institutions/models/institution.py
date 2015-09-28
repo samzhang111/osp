@@ -119,6 +119,18 @@ class Institution(BaseModel, Elasticsearch):
         with cls._meta.database.transaction():
             cls.insert_many(rows).execute()
 
+        reader = read_csv(
+            'osp.institutions',
+            'data/institutions_intl.csv'
+        )
+
+        rows = []
+        for row in reader:
+            rows.append({'metadata': row})
+
+        with cls._meta.database.transaction():
+            cls.insert_many(rows).execute()
+
 
     @property
     def geocoding_query(self):
